@@ -1,7 +1,9 @@
 <?php
 namespace App\Enums;
 
-enum PaymentMethod: string
+use Filament\Support\Contracts\HasLabel;
+
+enum PaymentMethod: string implements HasLabel
 {
     case CASH = 'cash';
     case BANK_TRANSFER = 'bank_transfer';

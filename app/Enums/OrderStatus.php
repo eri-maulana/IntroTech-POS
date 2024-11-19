@@ -1,7 +1,9 @@
 <?php
 namespace App\Enums;
 
-enum OrderStatus: string 
+use Filament\Support\Contracts\HasLabel;
+
+enum OrderStatus: string implements HasLabel
 {
     case PENDING = 'pending';
     case COMPLETED = 'completed';
