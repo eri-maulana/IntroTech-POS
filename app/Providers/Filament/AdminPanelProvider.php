@@ -28,6 +28,9 @@ class AdminPanelProvider extends PanelProvider
             ->id('admin')
             ->path('/')
             ->login()
+            ->brandName('Introtech')
+            // ->brandLogo(asset('images/logo.svg'))
+            // ->darkModeBrandLogo(asset('images/logo-white.svg'))
             ->colors([
                 'primary' => Color::Amber,
             ])
@@ -56,6 +59,10 @@ class AdminPanelProvider extends PanelProvider
                 Authenticate::class,
             ])
             ->sidebarCollapsibleOnDesktop()
-            ->viteTheme('resources/css/filament/admin/theme.css');
+            ->viteTheme('resources/css/filament/admin/theme.css')
+            ->navigationGroups([
+                'Transactions',
+                'Stock',
+            ]);
     }
 }
