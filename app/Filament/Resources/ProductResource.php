@@ -13,6 +13,7 @@ use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 
+
 class ProductResource extends Resource
 {
     protected static ?string $model = Product::class;
@@ -97,7 +98,7 @@ class ProductResource extends Resource
     public static function getRelations(): array
     {
         return [
-            //
+            RelationManagers\StockAdjustmentsRelationManager::class,
         ];
     }
 
