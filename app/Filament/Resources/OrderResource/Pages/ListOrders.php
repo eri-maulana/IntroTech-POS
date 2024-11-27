@@ -8,15 +8,26 @@ use App\Enums\OrderStatus;
 use App\Filament\Resources\OrderResource;
 use Filament\Resources\Pages\ListRecords;
 use Filament\Resources\Pages\ListRecords\Tab;
+use Filament\Pages\Concerns\ExposesTableToWidgets;
+use App\Filament\Resources\OrderResource\Widgets\OrderStats;
 
 class ListOrders extends ListRecords
 {
+    use ExposesTableToWidgets;
+    
     protected static string $resource = OrderResource::class;
 
     protected function getHeaderActions(): array
     {
         return [
             Actions\CreateAction::make(),
+        ];
+    }
+
+    public function getHeaderWidgets(): array
+    {
+        return [
+            OrderStats::class,
         ];
     }
 

@@ -17,11 +17,12 @@ use Filament\Infolists\Components\TextEntry;
 use App\Filament\Resources\OrderResource\Pages;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use App\Filament\Resources\OrderResource\RelationManagers;
+use App\Filament\Resources\OrderResource\Widgets\OrderStats;
 
 class OrderResource extends Resource
 {
     use \App\Traits\HasNavigationBadge;
-    
+
     protected static ?string $model = Order::class;
     protected static ?string $navigationGroup = 'Transactions';
     protected static ?string $navigationIcon = 'heroicon-o-shopping-bag';
@@ -237,5 +238,12 @@ class OrderResource extends Resource
             TextEntry::make('status')->badge()->color(fn($state) => $state->getColor()),
             TextEntry::make('created_at')->dateTime()->formatStateUsing(fn($state) => $state->format('d M Y H:i'))->color('gray'),
         ]);
+    }
+
+    public static function getWidgets(): array
+    {
+        return [
+            OrderStats::class,
+        ];
     }
 }
