@@ -28,6 +28,7 @@ class UserResource extends Resource
             ->schema([
                 Forms\Components\TextInput::make('name')
                     ->required()
+                    ->label('Nama')
                     ->maxLength(255),
                 Forms\Components\TextInput::make('email')
                     ->email()
@@ -35,6 +36,7 @@ class UserResource extends Resource
                     ->maxLength(255),
                 Forms\Components\TextInput::make('password')
                     ->password()
+                    ->label('Kata Sandi')
                     ->dehydrateStateUsing(fn($state) => bcrypt($state))
                     ->dehydrated(fn($state) => filled($state))
                     ->required(fn(string $context): bool => $context === 'create')
@@ -44,12 +46,14 @@ class UserResource extends Resource
                     ->same('passwordConfirmation'),
                 Forms\Components\TextInput::make('passwordConfirmation')
                     ->password()
+                    ->label('Konfirmasi Kata Sandi')
                     ->dehydrated(false)
                     ->revealable()
                     ->hidden(fn(Forms\Get $get) => $get('password') == null),
 
                 Forms\Components\Select::make('roles')
                     ->relationship('roles', 'name')
+                    ->label('Peran')
                     ->multiple()
                     ->preload(),
             ]);
@@ -60,24 +64,26 @@ class UserResource extends Resource
         return $table
             ->columns([
                 Tables\Columns\ImageColumn::make('avatar')
-                    ->circular(),
+                    ->circular()
+                    ->alignCenter()
+                    ->label('Avatar'),
                 Tables\Columns\TextColumn::make('name')
                     ->description(fn($record) => $record->email)
+                    ->label('Nama')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('roles.name')
+                ->label('Peran')
                     ->badge()
                     ->formatStateUsing(fn($state) => str($state)->title()->replace('_', ' ')),
-                Tables\Columns\TextColumn::make('email_verified_at')
-                    ->dateTime()
-                    ->sortable()
-                    ->formatStateUsing(fn($state) => $state ? $state->format('D d M, Y') : '-'),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
+                    ->label('Dibuat pada')
                     ->sortable()
                     ->formatStateUsing(fn($state) => $state ? $state->format('D d M, Y') : '-')
                     ->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\TextColumn::make('updated_at')
                     ->dateTime()
+                    ->label('Terakhir diubah')
                     ->sortable()
                     ->formatStateUsing(fn($state) => $state ? $state->format('D d M, Y') : '-')
                     ->toggleable(isToggledHiddenByDefault: true),
@@ -86,6 +92,7 @@ class UserResource extends Resource
                 Tables\Filters\SelectFilter::make('roles')
                     ->relationship('roles', 'name')
                     ->multiple()
+                    ->label('Peran')
                     ->preload(),
             ])
             ->actions([

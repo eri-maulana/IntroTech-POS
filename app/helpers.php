@@ -1,7 +1,7 @@
 <?php
 
 if (! function_exists('generateSequentialNumber')) {
-    function generateSequentialNumber(string $model, ?string $initials = null, string $column = 'order_number'): string
+    function generateSequentialNumber(string $model, ?string $initials = 'ORD', string $column = 'order_number'): string
     {
         $lastRecord = $model::latest('id')->first();
 

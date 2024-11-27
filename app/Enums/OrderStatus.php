@@ -5,9 +5,9 @@ use Filament\Support\Contracts\HasLabel;
 
 enum OrderStatus: string implements HasLabel
 {
-    case PENDING = 'pending';
-    case COMPLETED = 'completed';
-    case CANCELLED = 'cancelled';
+    case MENUNGGU = 'menunggu';
+    case SELESAI = 'selesai';
+    case DIBATALKAN = 'dibatalkan';
 
     public function getLabel(): ?string
     {
@@ -17,9 +17,9 @@ enum OrderStatus: string implements HasLabel
     public function getColor(): string
     {
         return match ($this) {
-            self::PENDING => 'warning',
-            self::COMPLETED => 'success',
-            self::CANCELLED => 'danger',
+            self::MENUNGGU => 'warning',
+            self::SELESAI => 'success',
+            self::DIBATALKAN => 'danger',
         };
     }
 }

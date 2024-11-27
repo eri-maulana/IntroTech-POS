@@ -42,7 +42,7 @@ class Order extends Model
 
     public function markAsComplete(): void
     {
-        $this->status = \App\Enums\OrderStatus::COMPLETED;
+        $this->status = \App\Enums\OrderStatus::SELESAI;
         $this->save();
     }
 

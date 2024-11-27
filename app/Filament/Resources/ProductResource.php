@@ -17,7 +17,7 @@ use Illuminate\Database\Eloquent\SoftDeletingScope;
 class ProductResource extends Resource
 {
     use \App\Traits\HasNavigationBadge;
-    
+
     protected static ?string $model = Product::class;
     protected static ?string $navigationGroup = 'Stock';
     protected static ?string $navigationIcon = 'heroicon-o-cube';
@@ -26,30 +26,39 @@ class ProductResource extends Resource
     {
         return $form
             ->schema([
-                Forms\Components\Select::make('category_id')
-                    ->relationship('category', 'name'),
                 Forms\Components\FileUpload::make('image')
-                    ->image(),
+                    ->image()
+                    ->columnSpanFull()
+                    ->label('Gambar'),
+                Forms\Components\Select::make('category_id')
+                    ->relationship('category', 'name')
+                    ->label('Pilih Kategori'),
                 Forms\Components\TextInput::make('name')
                     ->required()
-                    ->maxLength(255),
+                    ->maxLength(255)
+                    ->label('Nama Produk'),
                 Forms\Components\TextInput::make('sku')
                     ->label('SKU')
                     ->required()
                     ->maxLength(255),
-                Forms\Components\Textarea::make('description')
-                    ->required()
-                    ->columnSpanFull(),
                 Forms\Components\TextInput::make('stock_quantity')
                     ->required()
-                    ->numeric(),
+                    ->numeric()
+                    ->label('Jumlah Stok'),
+                Forms\Components\Textarea::make('description')
+                    ->required()
+                    ->columnSpanFull()
+                    ->label('Deskripsi'),
                 Forms\Components\TextInput::make('price')
                     ->required()
                     ->numeric()
-                    ->prefix('$'),
+                    ->prefix('Rp')
+                    ->label('Harga Jual'),
                 Forms\Components\TextInput::make('cost_price')
                     ->required()
-                    ->numeric(),
+                    ->numeric()
+                    ->prefix('Rp')
+                    ->label('Harga Modal'),
             ]);
     }
 
@@ -59,30 +68,42 @@ class ProductResource extends Resource
             ->columns([
                 Tables\Columns\TextColumn::make('category.name')
                     ->numeric()
-                    ->sortable(),
-                Tables\Columns\ImageColumn::make('image'),
+                    ->sortable()
+                    ->label('Kategori'),
+                Tables\Columns\ImageColumn::make('image')
+                    ->label('Gambar'),
                 Tables\Columns\TextColumn::make('name')
-                    ->searchable(),
+                    ->searchable()
+                    ->label('Nama Produk'),
                 Tables\Columns\TextColumn::make('sku')
                     ->label('SKU')
+                    ->alignCenter()
                     ->searchable(),
                 Tables\Columns\TextColumn::make('stock_quantity')
                     ->numeric()
-                    ->sortable(),
+                    ->sortable()
+                    ->alignCenter()
+                    ->label('Jumlah Stok'),
                 Tables\Columns\TextColumn::make('price')
-                    ->money()
-                    ->sortable(),
+                    ->numeric()
+                    ->sortable()
+                    ->alignCenter()
+                    ->label('Harga'),
                 Tables\Columns\TextColumn::make('cost_price')
                     ->numeric()
-                    ->sortable(),
+                    ->sortable()
+                    ->alignCenter()
+                    ->label('Harga Modal'),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
+                    ->toggleable(isToggledHiddenByDefault: true)
+                    ->label('Dibuat pada'),
                 Tables\Columns\TextColumn::make('updated_at')
                     ->dateTime()
                     ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
+                    ->toggleable(isToggledHiddenByDefault: true)
+                    ->label('Terakhir diubah'),
             ])
             ->filters([
                 //

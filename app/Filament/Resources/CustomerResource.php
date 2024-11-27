@@ -27,16 +27,21 @@ class CustomerResource extends Resource
             ->schema([
                 Forms\Components\TextInput::make('name')
                     ->required()
-                    ->maxLength(255),
+                    ->maxLength(255)
+                    ->label('Nama Pelanggan'),
+                    Forms\Components\TextInput::make('phone_number')
+                        ->tel()
+                        ->maxLength(255)
+                        ->label('No. Telpon'),
                 Forms\Components\TextInput::make('email')
                     ->email()
                     ->required()
-                    ->maxLength(255),
-                Forms\Components\TextInput::make('phone_number')
-                    ->tel()
-                    ->maxLength(255),
+                    ->maxLength(255)
+                    ->columnSpanFull()
+                    ->label('Email'),
                 Forms\Components\Textarea::make('address')
-                    ->columnSpanFull(),
+                    ->columnSpanFull()
+                    ->label('Alamat'),
             ]);
     }
 
@@ -45,19 +50,24 @@ class CustomerResource extends Resource
         return $table
             ->columns([
                 Tables\Columns\TextColumn::make('name')
-                    ->searchable(),
+                    ->searchable()
+                    ->label('Nama Pelanggan'),
                 Tables\Columns\TextColumn::make('email')
-                    ->searchable(),
+                    ->searchable()
+                    ->label('Email'),
                 Tables\Columns\TextColumn::make('phone_number')
-                    ->searchable(),
+                    ->searchable()
+                    ->label('No. Telpon'),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
+                    ->toggleable(isToggledHiddenByDefault: true)
+                    ->label('Dibuat pada'),
                 Tables\Columns\TextColumn::make('updated_at')
                     ->dateTime()
                     ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
+                    ->toggleable(isToggledHiddenByDefault: true)
+                    ->label('Terakhir diubah'),
             ])
             ->filters([
                 //

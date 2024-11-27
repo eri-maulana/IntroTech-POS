@@ -26,7 +26,7 @@ class OrderStats extends BaseWidget
         $createdTo = new Carbon($this->filters['end_date'] ?? now()->endOfMonth());
 
         $ordersQuery = Order::query()
-            ->where('status', OrderStatus::COMPLETED)
+            ->where('status', OrderStatus::SELESAI)
             ->when($this->filters['customer'], fn($query, $customer) => $query->where('customer_id', $customer))
             ->whereBetween('created_at', [$createdFrom, $createdTo]);
 
@@ -38,11 +38,13 @@ class OrderStats extends BaseWidget
         return [
             Stat::make('Orders', $countOrders)
                 ->icon('heroicon-o-shopping-bag')
-                ->description('Total orders'),
+                ->description('Total Pesanan')
+                ->label('Pesanan'),
 
             Stat::make('Profit', 'Rp ' . number_format($totalProfit, 0, ',', '.'))
                 ->icon('heroicon-o-banknotes')
-                ->description('Total profit'),
+                ->label('Total Keuntungan')
+                ->description('Total Keuntungan'),
 
             Stat::make(
                 'Customer',
@@ -52,7 +54,8 @@ class OrderStats extends BaseWidget
                 )->count()
             )
                 ->icon('heroicon-o-user-group')
-                ->description('Total customers'),
+                ->label('Total Pelanggan')
+                ->description('Total Pelanggan'),
         ];
     }
 }

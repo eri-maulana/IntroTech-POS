@@ -15,28 +15,34 @@ class ProductImporter extends Importer
     {
         return [
             ImportColumn::make('image')
-                ->rules(['max:255']),
+                ->rules(['max:255'])
+                ->label('Gambar'),
             ImportColumn::make('name')
                 ->requiredMapping()
-                ->rules(['required', 'max:255']),
+                ->rules(['required', 'max:255'])
+                ->label('Nama Produk'),
             ImportColumn::make('sku')
                 ->label('SKU')
                 ->requiredMapping()
                 ->rules(['required', 'max:255']),
             ImportColumn::make('description')
-                ->rules(['max:65535']),
+                ->rules(['max:65535'])
+                ->label('Deskripsi'),
             ImportColumn::make('stock_quantity')
                 ->requiredMapping()
                 ->numeric()
-                ->rules(['required', 'integer']),
+                ->rules(['required', 'integer'])
+                ->label('Jumlah Stok'),
             ImportColumn::make('cost_price')
                 ->requiredMapping()
                 ->numeric()
-                ->rules(['required', 'integer']),
+                ->rules(['required', 'integer'])
+                ->label('Harga Modal'),
             ImportColumn::make('price')
                 ->requiredMapping()
                 ->numeric()
-                ->rules(['required', 'integer']),
+                ->rules(['required', 'integer'])
+                ->label('Harga'),
         ];
     }
 

@@ -28,18 +28,21 @@ class StockAdjustmentResource extends Resource
             ->schema([
                 Forms\Components\Select::make('product_id')
                     ->relationship('product', 'name')
+                    ->label('Pilih Produk')
                     ->searchable()
                     ->preload()
                     ->required()
                     ->hiddenOn(StockAdjustmentsRelationManager::class),
                 Forms\Components\TextInput::make('quantity_adjusted')
                     ->required()
-                    ->numeric(),
+                    ->numeric()
+                    ->label('Stok yang disesuaikan'),
                 Forms\Components\Textarea::make('reason')
                     ->required()
+                    ->label('Alasan')
                     ->maxLength(65535)
-                    ->default('Restock.')
-                    ->placeholder('Write a reason for the stock adjustment')
+                    ->default('Tambah Stok.')
+                    ->placeholder('Alasan Penyesuaian Stok')
                     ->columnSpanFull(),
             ]);
     }
@@ -51,28 +54,36 @@ class StockAdjustmentResource extends Resource
             ->columns([
                 Tables\Columns\TextColumn::make('product.name')
                     ->sortable()
+                    ->label('Nama Produk')
                     ->hiddenOn(StockAdjustmentsRelationManager::class),
+                    
                 Tables\Columns\TextColumn::make('quantity_adjusted')
                     ->label('Adjusted')
                     ->numeric()
-                    ->suffix(' Quantity')
+                    ->alignCenter()
+                    ->label('Stok Disesuaikan')
+                    // ->suffix(' Kuantitas')
                     ->color('gray')
                     ->sortable(),
                 Tables\Columns\TextColumn::make('reason')
                     ->limit(50)
+                    ->label('Alasan')
                     ->placeholder('-'),
                 Tables\Columns\TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()
+                    ->label('Dibuat pada')
                     ->toggleable(),
                 Tables\Columns\TextColumn::make('updated_at')
                     ->dateTime()
+                    ->label('Terakhir diubah')
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
                 Tables\Filters\SelectFilter::make('product_id')
                     ->relationship('product', 'name')
+                    ->label('Nama Produk')
                     ->searchable()
                     ->preload()
                     ->hiddenOn(StockAdjustmentsRelationManager::class),

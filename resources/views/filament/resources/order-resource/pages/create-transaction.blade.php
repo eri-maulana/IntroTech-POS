@@ -2,16 +2,16 @@
     <x-filament::grid class="gap-6 items-start" default="2">
         <x-filament::section>
             <x-slot name="heading">
-                Select Product
+                Pilih Produk
             </x-slot>
             <x-slot name="description">
-                Select the product you want to order.
+                Pilih produk yang ingin kamu pesan
             </x-slot>
             {{ $this->form }}
         </x-filament::section>
         <x-filament::section>
             <x-slot name="heading">
-                Detail Orders
+                Detail Pesanan
             </x-slot>
             <div class="-mx-4 flow-root sm:mx-0">
                 <form wire:submit="finalizeOrder">
@@ -24,9 +24,9 @@
                         </colgroup>
                         <x-table.thead>
                             <tr>
-                                <x-table.th>Name</x-table.th>
-                                <x-table.th>Quantity</x-table.th>
-                                <x-table.th>Price</x-table.th>
+                                <x-table.th>Nama</x-table.th>
+                                <x-table.th>Kuantitas</x-table.th>
+                                <x-table.th>Harga</x-table.th>
                             </tr>
                         </x-table.thead>
                         <tbody>
@@ -36,7 +36,7 @@
                                     <div
                                         class="font-medium dark:text-white text-zinc-900">{{ $orderDetail->product->name }}</div>
                                     <div class="mt-1 truncate text-zinc-500 dark:text-zinc-400">
-                                        The current stock is {{ $orderDetail->product->stock_quantity }}
+                                        Stok saat ini adalah:  {{ $orderDetail->product->stock_quantity }}
                                     </div>
                                 </x-table.td>
                                 <x-table.td>
@@ -63,7 +63,7 @@
                                 <td colspan="4">
                                     <div
                                         class="py-5 pl-4 pr-3 text-sm sm:pl-0 text-center dark:text-zinc-500 text-zinc-500">
-                                        No products selected.
+                                        Tidak ada produk yang dipilih.
                                     </div>
                                 </td>
                             </tr>
@@ -88,7 +88,7 @@
                         <tr>
                             <th scope="row" colspan="2"
                                 class="hidden pl-4 pr-3 pt-4 text-right text-sm font-normal dark:text-zinc-400 text-zinc-500 sm:table-cell sm:pl-0">
-                                Discount
+                                Diskon
                             </th>
                             <th scope="row"
                                 class="pl-4 pr-3 pt-4 text-left text-sm font-normal dark:text-zinc-400 text-zinc-500 sm:hidden">
@@ -125,11 +125,11 @@
                         <x-filament::button type="button"
                                             color="gray"
                                             wire:click="saveAsDraft">
-                            Save as Draft
+                            Simpan sebagai Draf
                         </x-filament::button>
 
                         <x-filament::button type="submit" class="ml-2">
-                            Make Transaction
+                            Buat Transaksi
                         </x-filament::button>
                     </div>
                 </form>

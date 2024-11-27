@@ -23,7 +23,8 @@ class OrderDetailsRelationManager extends RelationManager
             ->recordTitleAttribute('order_number')
             ->columns([
                 Tables\Columns\TextColumn::make('product.name')
-                    ->searchable(),
+                    ->searchable()
+                    ->label('Nama Produk'),
                 Tables\Columns\TextColumn::make('price')
                     ->label('Harga Satuan')
                     ->numeric()

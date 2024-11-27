@@ -34,10 +34,10 @@ class ListOrders extends ListRecords
     public function getTabs(): array
     {
         $statuses = collect([
-            'all' => ['label' => 'All', 'badgeColor' => 'primary', 'status' => null],
-            OrderStatus::PENDING->name => ['label' => 'Pending', 'badgeColor' => 'warning', 'status' => OrderStatus::PENDING],
-            OrderStatus::COMPLETED->name => ['label' => 'Completed', 'badgeColor' => 'success', 'status' => OrderStatus::COMPLETED],
-            OrderStatus::CANCELLED->name => ['label' => 'Cancelled', 'badgeColor' => 'danger', 'status' => OrderStatus::CANCELLED],
+            'semua' => ['label' => 'Semua', 'badgeColor' => 'primary', 'status' => null],
+            OrderStatus::MENUNGGU->name => ['label' => 'Menunggu', 'badgeColor' => 'warning', 'status' => OrderStatus::MENUNGGU],
+            OrderStatus::SELESAI->name => ['label' => 'Selesai', 'badgeColor' => 'success', 'status' => OrderStatus::SELESAI],
+            OrderStatus::DIBATALKAN->name => ['label' => 'Dibatalkan', 'badgeColor' => 'danger', 'status' => OrderStatus::DIBATALKAN],
         ]);
 
         return $statuses->mapWithKeys(function ($data, $key) {

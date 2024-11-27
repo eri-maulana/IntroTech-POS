@@ -23,16 +23,19 @@ class Dashboard extends BaseDashboard
                     ->schema([
                         Select::make('customer')
                             ->options(fn () => \App\Models\Customer::pluck('name', 'id')->toArray())
-                            ->placeholder('All customers')
+                            ->placeholder('Semua Pelanggan')
                             ->searchable()
-                            ->preload(),
+                            ->preload()
+                            ->label('Pelanggan'),
                         DatePicker::make('start_date')
                             ->native(false)
-                            ->maxDate(fn (Get $get) => $get('end_date') ?: now()),
+                            ->maxDate(fn (Get $get) => $get('end_date') ?: now())
+                            ->label('Tanggal Awal'),
                         DatePicker::make('end_date')
                             ->minDate(fn (Get $get) => $get('start_date') ?: now())
                             ->native(false)
-                            ->maxDate(now()),
+                            ->maxDate(now())
+                            ->label('Tanggal Akhir'),
                     ])
                     ->columns(3),
             ]);

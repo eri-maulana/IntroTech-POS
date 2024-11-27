@@ -28,27 +28,27 @@ class OrderStats extends BaseWidget
 
         $count = Trend::model(Order::class)->between(start: $createdFrom, end: $createdTo)->perDay()->count();
 
-        $profit = Trend::query(Order::query()->where('status', OrderStatus::COMPLETED))
+        $profit = Trend::query(Order::query()->where('status', OrderStatus::SELESAI))
             ->between(start: now()->startOfYear(), end: now()->endOfYear())
             ->perMonth()
             ->sum('profit');
 
-        $total = Trend::query(Order::query()->where('status', OrderStatus::COMPLETED))
+        $total = Trend::query(Order::query()->where('status', OrderStatus::SELESAI))
             ->between(start: now()->startOfYear(), end: now()->endOfYear())
             ->perMonth()
             ->sum('total');
 
         return [
-            Stat::make('Orders', $this->getPageTableQuery()->count())
+            Stat::make('Pesanan', $this->getPageTableQuery()->count())
                 ->chart($count->map(fn (TrendValue $item) => $item->aggregate)->toArray())
                 ->icon('heroicon-o-shopping-bag')
-                ->description('Orders this month so far.')
+                ->description('Pesanan bulan ini.')
                 ->descriptionColor('gray')
                 ->color('success'),
 
             Stat::make('Total', 'Rp ' . number_format(
                 Order::query()
-                    ->where('status', OrderStatus::COMPLETED)
+                    ->where('status', OrderStatus::SELESAI)
                     ->when(
                         $this->tableFilters['created_at']['created_from'] && $this->tableFilters['created_at']['created_until'],
                         fn ($query) => $query->whereDate('created_at', '>=', $createdFrom)->whereDate('created_at', '<=', $createdTo)
@@ -58,13 +58,13 @@ class OrderStats extends BaseWidget
             )
                 ->chart($total->map(fn (TrendValue $item) => $item->aggregate)->toArray())
                 ->icon('heroicon-o-banknotes')
-                ->description('Profit this month so far.')
+                ->description('Penjualan bulan ini.')
                 ->descriptionColor('gray')
                 ->color('success'),
 
-            Stat::make('Profit', 'Rp ' . number_format(
+            Stat::make('Keuntungan', 'Rp ' . number_format(
                 Order::query()
-                    ->where('status', OrderStatus::COMPLETED)
+                    ->where('status', OrderStatus::SELESAI)
                     ->when(
                         $this->tableFilters['created_at']['created_from'] && $this->tableFilters['created_at']['created_until'],
                         fn ($query) => $query->whereDate('created_at', '>=', $createdFrom)->whereDate('created_at', '<=', $createdTo)
@@ -74,7 +74,7 @@ class OrderStats extends BaseWidget
             )
                 ->chart($profit->map(fn (TrendValue $item) => $item->aggregate)->toArray())
                 ->icon('heroicon-o-banknotes')
-                ->description('Profit this month so far.')
+                ->description('Keuntungan bulan ini.')
                 ->descriptionColor('gray')
                 ->color('success'),
         ];

@@ -17,7 +17,8 @@ class ListProducts extends ListRecords
             Actions\CreateAction::make(),
             Actions\ImportAction::make()
                 ->importer(ProductImporter::class)
-                ->icon('heroicon-o-document-arrow-down'),
+                ->icon('heroicon-o-document-arrow-down')
+                ->label('Impor Data Produk'),
         ];
     }
 }

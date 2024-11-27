@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link rel="stylesheet" href="style.css">
-    <title>Receipt example</title>
+    <title>Nota Belanja</title>
     <style>
         @page {
             size: 3.15in;
@@ -53,7 +53,7 @@
         <tr>
             <th style="width: 6%;">#</th>
             <th style="width: 60%">Nama</th>
-            <th style="text-align: right;width: 40%">Quantity</th>
+            <th style="text-align: right;width: 40%">Kuantitas</th>
             <th style="text-align: right">Harga</th>
         </tr>
         </thead>
@@ -71,15 +71,15 @@
         <tr><td/><td/><td/><td/></tr><tr><td/><td/><td/><td/></tr>
 
         <tr>
-            <td colspan="3" style="text-align: right;">Grand Total:</td>
+            <td colspan="3" style="text-align: right;">Total:</td>
             <td style="text-align: right; font-weight: bold; font-family: 'monospace'">Rp {{ number_format($order->total, 0, '.', '.') }}</td>
         </tr>
         <tr>
-            <td colspan="3" style="text-align: right;">Discount:</td>
+            <td colspan="3" style="text-align: right;">Diskon:</td>
             <td style="text-align: right; font-weight: bold; font-family: 'monospace'">Rp {{ number_format($order->discount ?? '0', 0, '.', '.') }}</td>
         </tr>
         <tr>
-            <td colspan="3" style="text-align: right;">Total After Discount:</td>
+            <td colspan="3" style="text-align: right;">Total setelah Diskon:</td>
             <td style="text-align: right; width: 40%; font-weight: bold; font-family: 'monospace', sans-serif">
                 Rp {{ number_format($order->total - $order->discount, 0, '.', '.') }}
             </td>

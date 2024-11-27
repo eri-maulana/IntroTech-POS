@@ -35,33 +35,38 @@ class OrderResource extends Resource
                     Forms\Components\TextInput::make('order_number')
                         ->required()
                         ->default(generateSequentialNumber(Order::class))
-                        ->readOnly(),
+                        ->readOnly()
+                        ->label('No. Pesanan'),
                     Forms\Components\TextInput::make('order_name')
                         ->maxLength(255)
-                        ->placeholder('Order Name'),
+                        ->placeholder('Nama Pesanan')
+                        ->label('Nama Pesanan'),
                     Forms\Components\TextInput::make('total')
-                        ->readOnlyOn('create')
+                        // ->readOnlyOn('create')
+                        ->disabledOn('create')
                         ->default(0)
                         ->numeric(),
                     Forms\Components\Select::make('customer_id')
                         ->relationship('customer', 'name')
                         ->searchable()
                         ->preload()
-                        ->label('Customer (optional)')
-                        ->placeholder('Select Customer'),
+                        ->label('Pelanggan (optional)')
+                        ->placeholder('Pilih Pelanggan'),
 
                     Forms\Components\Group::make([
                         Forms\Components\Select::make('payment_method')
                             ->enum(PaymentMethod::class)
                             ->options(PaymentMethod::class)
-                            ->default(PaymentMethod::CASH)
-                            ->required(),
+                            ->default(PaymentMethod::TUNAI)
+                            ->required()
+                            ->label('Metode Pembayaran'),
                         Forms\Components\Select::make('status')
                             ->required()
                             ->enum(OrderStatus::class)
                             ->options(OrderStatus::class)
-                            ->default(OrderStatus::PENDING),
-                    ])->columnSpan(2)->columns(2),
+                            ->default(OrderStatus::MENUNGGU)
+                            ->label('Status'),
+                    ])->columnSpan(2)->columns(2)->label('Informasi Pesanan'),
                 ])->columns(2),
             ]);
     }
@@ -76,15 +81,18 @@ class OrderResource extends Resource
                     ->options(\App\Enums\OrderStatus::class),
                 Tables\Filters\SelectFilter::make('payment_method')
                     ->multiple()
-                    ->options(\App\Enums\PaymentMethod::class),
+                    ->options(\App\Enums\PaymentMethod::class)
+                    ->label('Metode Pembayaran'),
                 Tables\Filters\Filter::make('created_at')
                     ->form([
                         Forms\Components\DatePicker::make('created_from')
                             ->maxDate(fn(Forms\Get $get) => $get('end_date') ?: now())
-                            ->native(false),
+                            ->native(false)
+                            ->label('Tanggal Awal'),
                         Forms\Components\DatePicker::make('created_until')
                             ->native(false)
-                            ->maxDate(now()),
+                            ->maxDate(now())
+                            ->label('Tanggal Akhir'),
                     ])
                     ->query(function (Builder $query, array $data): Builder {
                         return $query
@@ -111,7 +119,8 @@ class OrderResource extends Resource
                         return response()->streamDownload(function () use ($pdf) {
                             echo $pdf->stream();
                         }, 'receipt-' . $record->order_number . '.pdf');
-                    }),
+                    })
+                    ->label('Cetak'),
 
                 Tables\Actions\ActionGroup::make([
                     Tables\Actions\ViewAction::make()
@@ -119,17 +128,17 @@ class OrderResource extends Resource
                     Tables\Actions\EditAction::make()
                         ->color('gray'),
                     Tables\Actions\Action::make('edit-transaction')
-                        ->visible(fn(Order $record) => $record->status === OrderStatus::PENDING)
-                        ->label('Edit Transaction')
+                        ->visible(fn(Order $record) => $record->status === OrderStatus::MENUNGGU)
+                        ->label('Ubah Transaksi')
                         ->icon('heroicon-o-pencil')
                         ->url(fn($record) => "/orders/{$record->order_number}"),
                     Tables\Actions\Action::make('mark-as-complete')
-                        ->visible(fn(Order $record) => $record->status === OrderStatus::PENDING)
+                        ->visible(fn(Order $record) => $record->status === OrderStatus::MENUNGGU)
                         ->requiresConfirmation()
                         ->icon('heroicon-o-check-circle')
                         ->color('success')
                         ->action(fn(Order $record) => $record->markAsComplete())
-                        ->label('Mark as Complete'),
+                        ->label('Tandai telah selesai.'),
                     Tables\Actions\Action::make('divider')->label('')->disabled(),
                     Tables\Actions\DeleteAction::make()
                         ->before(function (Order $order) {
@@ -149,7 +158,7 @@ class OrderResource extends Resource
             ])
             ->headerActions([
                 Tables\Actions\ExportAction::make()
-                    ->label('Export Excel')
+                    ->label('Ekspor Excel')
                     ->fileDisk('public')
                     ->color('success')
                     ->icon('heroicon-o-document-text')
@@ -180,15 +189,18 @@ class OrderResource extends Resource
         return [
             Tables\Columns\TextColumn::make('order_number')
                 ->searchable()
-                ->sortable(),
+                ->sortable()
+                ->label('No. Pesanan'),
             Tables\Columns\TextColumn::make('order_name')
-                ->searchable(),
+                ->searchable()
+                ->label('Nama Pesanan'),
             Tables\Columns\TextColumn::make('discount')
                 ->numeric()
-                ->sortable(),
+                ->sortable()
+                ->label('Diskon'),
             Tables\Columns\TextColumn::make('total')
                 ->numeric()
-                ->alignEnd()
+                ->alignCenter()
                 ->sortable()
                 ->summarize(
                     Tables\Columns\Summarizers\Sum::make('total')
@@ -196,47 +208,72 @@ class OrderResource extends Resource
                 ),
             Tables\Columns\TextColumn::make('profit')
                 ->numeric()
-                ->alignEnd()
+                ->alignCenter()
                 ->summarize(
                     Tables\Columns\Summarizers\Sum::make('profit')
                         ->money('IDR'),
                 )
-                ->sortable(),
+                ->sortable()
+                ->label('Keuntungan'),
             Tables\Columns\TextColumn::make('payment_method')
                 ->badge()
-                ->color('gray'),
+                ->alignCenter()
+                ->color('gray')
+                ->label('Metode Pembayaran'),
             Tables\Columns\TextColumn::make('status')
                 ->badge()
-                ->color(fn($state) => $state->getColor()),
-
+                ->color(fn($state) => $state->getColor())
+                ->alignCenter(),
             Tables\Columns\TextColumn::make('user.name')
                 ->numeric()
-                ->toggleable(isToggledHiddenByDefault: true),
+                ->toggleable(isToggledHiddenByDefault: true)
+                ->label('Nama Pengguna'),
             Tables\Columns\TextColumn::make('customer.name')
                 ->numeric()
-                ->toggleable(isToggledHiddenByDefault: true),
+                ->toggleable(isToggledHiddenByDefault: true)
+                ->label('Nama Pelanggan'),
             Tables\Columns\TextColumn::make('created_at')
                 ->dateTime()
                 ->sortable()
-                ->formatStateUsing(fn($state) => $state->format('d M Y H:i')),
+                ->formatStateUsing(fn($state) => $state->format('d M Y H:i'))
+                ->label('Dibuat pada'),
             Tables\Columns\TextColumn::make('updated_at')
                 ->dateTime()
                 ->sortable()
                 ->formatStateUsing(fn($state) => $state->format('d M Y H:i'))
-                ->toggleable(isToggledHiddenByDefault: true),
+                ->toggleable(isToggledHiddenByDefault: true)
+                ->label('Terakhir diubah'),
         ];
     }
 
     public static function infolist(Infolist $infolist): Infolist
     {
         return $infolist->schema([
-            TextEntry::make('order_number')->color('gray'),
-            TextEntry::make('customer.name')->placeholder('-'),
-            TextEntry::make('discount')->money('IDR')->color('gray'),
-            TextEntry::make('total')->money('IDR')->color('gray'),
-            TextEntry::make('payment_method')->badge()->color('gray'),
-            TextEntry::make('status')->badge()->color(fn($state) => $state->getColor()),
-            TextEntry::make('created_at')->dateTime()->formatStateUsing(fn($state) => $state->format('d M Y H:i'))->color('gray'),
+            TextEntry::make('order_number')
+                ->color('gray')
+                ->label('No. Pesanan'),
+            TextEntry::make('customer.name')
+                ->placeholder('-')
+                ->label('Nama Pelanggan'),
+            TextEntry::make('discount')
+                ->color('gray')
+                ->label('Diskon'),
+            TextEntry::make('total')
+                ->color('gray'),
+            TextEntry::make('payment_method')
+                ->badge()
+                ->color('gray')
+                ->label('Metode Pembayaran'),
+            TextEntry::make('status')
+                ->badge()
+                ->color(fn($state) => $state
+                    ->getColor()),
+            TextEntry::make('created_at')
+                ->dateTime()
+                ->formatStateUsing(fn($state) => $state
+                    ->format('d M Y H:i'))
+                ->color('gray')
+                ->label('Dibuat pada'),
         ]);
     }
 

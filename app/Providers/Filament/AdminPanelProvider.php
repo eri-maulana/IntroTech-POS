@@ -72,8 +72,8 @@ class AdminPanelProvider extends PanelProvider
             ->sidebarCollapsibleOnDesktop()
             ->viteTheme('resources/css/filament/admin/theme.css')
             ->navigationGroups([
-                'Transactions',
-                'Stock',
+                'Transaksi',
+                'Stok',
             ]);
     }
 }

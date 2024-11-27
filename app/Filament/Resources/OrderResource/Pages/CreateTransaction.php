@@ -25,14 +25,14 @@ class CreateTransaction extends Page implements HasForms
 
     public function getTitle(): string
     {
-        return "Order: {$this->record->order_number}";
+        return "Pesanan: {$this->record->order_number}";
     }
 
     protected function getFormSchema(): array
     {
         return [
             Select::make('selectedProduct')
-                ->label('Select Product')
+                ->label('Pilih Produk')
                 ->searchable()
                 ->preload()
                 ->options(Product::pluck('name', 'id')->toArray())
@@ -85,7 +85,7 @@ class CreateTransaction extends Page implements HasForms
     public function finalizeOrder(): void
     {
         $this->updateOrder();
-        $this->record->update(['status' => OrderStatus::COMPLETED]);
+        $this->record->update(['status' => OrderStatus::SELESAI]);
         $this->redirect('/orders');
     }
 
