@@ -18,13 +18,16 @@ use App\Filament\Resources\OrderResource\Pages;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
 use App\Filament\Resources\OrderResource\RelationManagers;
 use App\Filament\Resources\OrderResource\Widgets\OrderStats;
+use Filament\Tables\Contracts\HasTable;
+use stdClass;
 
 class OrderResource extends Resource
 {
     use \App\Traits\HasNavigationBadge;
 
     protected static ?string $model = Order::class;
-    protected static ?string $navigationGroup = 'Transactions';
+    protected static ?string $navigationGroup = 'Transaksi';
+    protected static ?string $navigationLabel = 'Pesanan';
     protected static ?string $navigationIcon = 'heroicon-o-shopping-bag';
 
     public static function form(Form $form): Form
@@ -120,7 +123,8 @@ class OrderResource extends Resource
                             echo $pdf->stream();
                         }, 'receipt-' . $record->order_number . '.pdf');
                     })
-                    ->label('Cetak'),
+                    ->label('Cetak')
+                    ->visible(fn(Order $record) => $record->status === OrderStatus::SELESAI),
 
                 Tables\Actions\ActionGroup::make([
                     Tables\Actions\ViewAction::make()
@@ -187,6 +191,16 @@ class OrderResource extends Resource
     public static function getTableColumns(): array
     {
         return [
+            Tables\Columns\TextColumn::make('no')->state(
+                static function (HasTable $livewire, stdClass $rowLoop): string {
+                    return (string) (
+                        $rowLoop->iteration +
+                        ($livewire->getTableRecordsPerPage() * (
+                            $livewire->getTablePage() - 1
+                        ))
+                    );
+                }
+            ),
             Tables\Columns\TextColumn::make('order_number')
                 ->searchable()
                 ->sortable()
@@ -206,15 +220,15 @@ class OrderResource extends Resource
                     Tables\Columns\Summarizers\Sum::make('total')
                         ->money('IDR'),
                 ),
-            Tables\Columns\TextColumn::make('profit')
-                ->numeric()
-                ->alignCenter()
-                ->summarize(
-                    Tables\Columns\Summarizers\Sum::make('profit')
-                        ->money('IDR'),
-                )
-                ->sortable()
-                ->label('Keuntungan'),
+            // Tables\Columns\TextColumn::make('profit')
+            //     ->numeric()
+            //     ->alignCenter()
+            //     ->summarize(
+            //         Tables\Columns\Summarizers\Sum::make('profit')
+            //             ->money('IDR'),
+            //     )
+            //     ->sortable()
+            //     ->label('Keuntungan'),
             Tables\Columns\TextColumn::make('payment_method')
                 ->badge()
                 ->alignCenter()
@@ -282,5 +296,17 @@ class OrderResource extends Resource
         return [
             OrderStats::class,
         ];
+    }
+
+    public static function getLabel(): ?string 
+    {
+
+        $locale = app()->getLocale();
+
+        if($locale == 'id'){
+            return 'Pesanan';
+        } else {
+            return 'Order';
+        }
     }
 }

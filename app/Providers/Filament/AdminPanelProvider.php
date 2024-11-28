@@ -7,6 +7,7 @@ use Filament\Panel;
 use Filament\Widgets;
 use Filament\PanelProvider;
 use App\Filament\Pages\Dashboard;
+use Filament\Navigation\MenuItem;
 use Filament\Support\Colors\Color;
 use Filament\Http\Middleware\Authenticate;
 use Awcodes\FilamentGravatar\GravatarPlugin;
@@ -20,7 +21,10 @@ use Illuminate\View\Middleware\ShareErrorsFromSession;
 use Filament\Http\Middleware\DisableBladeIconComponents;
 use Filament\Http\Middleware\DispatchServingFilamentEvent;
 use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken;
+use Njxqlus\FilamentProgressbar\FilamentProgressbarPlugin;
 use Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse;
+use Joaopaulolndev\FilamentEditProfile\Pages\EditProfilePage;
+use Joaopaulolndev\FilamentEditProfile\FilamentEditProfilePlugin;
 
 class AdminPanelProvider extends PanelProvider
 {
@@ -65,6 +69,13 @@ class AdminPanelProvider extends PanelProvider
                 GravatarPlugin::make()
                     ->size(200)
                     ->rating('pg'),
+                FilamentEditProfilePlugin::make()
+                    ->setTitle('Profil')
+                    ->setNavigationLabel('Profil')
+                    ->setNavigationGroup('Pengaturan')
+                    ->setIcon('heroicon-s-cog-8-tooth')
+                    ->shouldShowAvatarForm(),
+                
             ])
             ->authMiddleware([
                 Authenticate::class,
@@ -74,6 +85,12 @@ class AdminPanelProvider extends PanelProvider
             ->navigationGroups([
                 'Transaksi',
                 'Stok',
+            ])
+            ->userMenuItems([
+                MenuItem::make()
+                    ->label('Ubah Profil')
+                    ->url(fn (): string => EditProfilePage::getUrl())
+                    ->icon('heroicon-s-cog-8-tooth'),
             ]);
     }
 }

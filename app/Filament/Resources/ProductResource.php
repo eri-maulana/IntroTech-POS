@@ -19,7 +19,8 @@ class ProductResource extends Resource
     use \App\Traits\HasNavigationBadge;
 
     protected static ?string $model = Product::class;
-    protected static ?string $navigationGroup = 'Stock';
+    protected static ?string $navigationGroup = 'Stok';
+    protected static ?string $navigationLabel = 'Produk';
     protected static ?string $navigationIcon = 'heroicon-o-cube';
 
     public static function form(Form $form): Form
@@ -39,6 +40,7 @@ class ProductResource extends Resource
                     ->label('Nama Produk'),
                 Forms\Components\TextInput::make('sku')
                     ->label('SKU')
+                    ->default(generateSequentialNumberProduct(Product::class))
                     ->required()
                     ->maxLength(255),
                 Forms\Components\TextInput::make('stock_quantity')
@@ -65,6 +67,7 @@ class ProductResource extends Resource
     public static function table(Table $table): Table
     {
         return $table
+            ->defaultSort('name', 'asc')
             ->columns([
                 Tables\Columns\TextColumn::make('category.name')
                     ->numeric()
@@ -132,5 +135,17 @@ class ProductResource extends Resource
             'create' => Pages\CreateProduct::route('/create'),
             'edit' => Pages\EditProduct::route('/{record}/edit'),
         ];
+    }
+
+    public static function getLabel(): ?string
+    {
+
+        $locale = app()->getLocale();
+
+        if ($locale == 'id') {
+            return 'Produk';
+        } else {
+            return 'Product';
+        }
     }
 }

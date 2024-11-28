@@ -31,7 +31,7 @@ return [
     |--------------------------------------------------------------------------
     */
 
-    'nav.group' => 'Manajemen User',
+    'nav.group' => 'Manajemen Pengguna',
     'nav.role.label' => 'Peran',
     'nav.role.icon' => 'heroicon-o-shield-check',
     'resource.label.role' => 'Peran',

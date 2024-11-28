@@ -13,13 +13,16 @@ use Illuminate\Database\Eloquent\SoftDeletingScope;
 use App\Filament\Resources\StockAdjustmentResource\Pages;
 use App\Filament\Resources\StockAdjustmentResource\RelationManagers;
 use App\Filament\Resources\ProductResource\RelationManagers\StockAdjustmentsRelationManager;
+use Filament\Tables\Contracts\HasTable;
+use stdClass;
 
 class StockAdjustmentResource extends Resource
 {
     use \App\Traits\HasNavigationBadge;
     
     protected static ?string $model = StockAdjustment::class;
-    protected static ?string $navigationGroup = 'Stock';
+    protected static ?string $navigationGroup = 'Stok';
+    protected static ?string $navigationLabel = 'Penyesuaian Stok';
     protected static ?string $navigationIcon = 'heroicon-o-folder';
 
     public static function form(Form $form): Form
@@ -52,6 +55,16 @@ class StockAdjustmentResource extends Resource
         return $table
             ->defaultSort('created_at', 'desc')
             ->columns([
+                Tables\Columns\TextColumn::make('no')->state(
+                    static function (HasTable $livewire, stdClass $rowLoop): string {
+                        return (string) (
+                            $rowLoop->iteration +
+                            ($livewire->getTableRecordsPerPage() * (
+                                $livewire->getTablePage() - 1
+                            ))
+                        );
+                    }
+                ),
                 Tables\Columns\TextColumn::make('product.name')
                     ->sortable()
                     ->label('Nama Produk')
@@ -107,5 +120,17 @@ class StockAdjustmentResource extends Resource
         return [
             'index' => Pages\ManageStockAdjustments::route('/'),
         ];
+    }
+
+    public static function getLabel(): ?string 
+    {
+
+        $locale = app()->getLocale();
+
+        if($locale == 'id'){
+            return 'Penyesuaian Stok';
+        } else {
+            return 'Stock Adjustment';
+        }
     }
 }

@@ -12,13 +12,16 @@ use Filament\Tables;
 use Filament\Tables\Table;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\SoftDeletingScope;
+use Filament\Tables\Contracts\HasTable;
+use stdClass;
 
 class CategoryResource extends Resource
 {
     use \App\Traits\HasNavigationBadge;
     
     protected static ?string $model = Category::class;
-    protected static ?string $navigationGroup = 'Stock';
+    protected static ?string $navigationGroup = 'Stok';
+    protected static ?string $navigationLabel = 'Kategori';
     protected static ?string $navigationIcon = 'heroicon-o-hashtag';
 
     public static function form(Form $form): Form
@@ -36,6 +39,16 @@ class CategoryResource extends Resource
     {
         return $table
             ->columns([
+                Tables\Columns\TextColumn::make('no')->state(
+                    static function (HasTable $livewire, stdClass $rowLoop): string {
+                        return (string) (
+                            $rowLoop->iteration +
+                            ($livewire->getTableRecordsPerPage() * (
+                                $livewire->getTablePage() - 1
+                            ))
+                        );
+                    }
+                ),
                 Tables\Columns\TextColumn::make('name')
                     ->searchable()
                     ->label('Nama Kategori'),
@@ -69,5 +82,17 @@ class CategoryResource extends Resource
         return [
             'index' => Pages\ManageCategories::route('/'),
         ];
+    }
+
+    public static function getLabel(): ?string 
+    {
+
+        $locale = app()->getLocale();
+
+        if($locale == 'id'){
+            return 'Kategori';
+        } else {
+            return 'Category';
+        }
     }
 }

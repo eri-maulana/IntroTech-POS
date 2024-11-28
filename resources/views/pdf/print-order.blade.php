@@ -48,22 +48,25 @@
 <div>
     <h1 class="title">{{ config('app.name') }}</h1>
     <p class="subtitle">{{ now()->format('d F Y H:i') }}</p>
+    <hr>
     <table>
         <thead>
         <tr>
             <th style="width: 6%;">#</th>
-            <th style="width: 60%">Nama</th>
-            <th style="text-align: right;width: 40%">Kuantitas</th>
+            <th style="width: 25%;">NP</th>
+            <th style="width: 35%">Nama</th>
+            <th style="width: 30%; text-align:center;">Qty</th>
             <th style="text-align: right">Harga</th>
         </tr>
         </thead>
         <tbody>
         @foreach ($order->orderDetails as $detail)
             <tr>
-                <td style="width: 6%; font-family: monospace">{{ $loop->iteration }}.</td>
-                <td style="width: 60%">{{ $detail->product->name }}</td>
-                <td style="width: 40%; letter-spacing: -1.5px; text-align: right;font-family: 'monospace'">{{ $detail->quantity }} x {{ number_format($detail->price, 0, '.', '.') }}</td>
-                <td style="text-align: right;font-family: 'monospace'">{{ number_format($detail->price * $detail->quantity, 0, '.', '.') }}</td>
+                <td style="width: 6%; font-size: 7px; font-family: monospace">{{ $loop->iteration }}.</td>
+                <td style="width: 25%; font-size: 7px;font-family: monospace;">{{ $detail->order->order_number }}</td>
+                <td style="width: 35%; font-family: monospace">{{ $detail->product->name }}</td>
+                <td style="width: 30%; letter-spacing: -1.5px; font-family: 'monospace';font-size: 7px; text-align:center;">{{ $detail->quantity }} x {{ number_format($detail->price, 0, '.', '.') }}</td>
+                <td style="text-align: right;font-family: 'monospace';font-size: 7px;">{{ number_format($detail->price * $detail->quantity, 0, '.', '.') }}</td>
             </tr>
         @endforeach
 
@@ -86,6 +89,11 @@
         </tr>
         </tbody>
     </table>
+    <p style="font-size: 7px; text-align: left;margin-top: 15px;"><b>#catatan:</b>
+        <br>
+        - harap tidak dibuang karena nota ini sekaligus berupa garansi yang berlaku selama 1 bulan 
+        <br>
+        - garansi hangus jika tidak ada nota</p>
 </div>
 </body>
 </html>
